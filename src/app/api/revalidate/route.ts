@@ -58,8 +58,8 @@ export async function POST(req: NextRequest) {
 			//content item change
 			const itemTag = `agility-content-${data.referenceName.toLowerCase()}-${data.languageCode}`
 			const listTag = `agility-content-${data.contentID}-${data.languageCode}`
-			revalidateTag(itemTag)
-			revalidateTag(listTag)
+			revalidateTag(itemTag, "max")
+			revalidateTag(listTag, "max")
 
 			console.info("Revalidating content tags:", itemTag, listTag)
 
@@ -78,14 +78,14 @@ export async function POST(req: NextRequest) {
 		} else if (data.pageID !== undefined && data.pageID > 0) {
 			//page change
 			const pageTag = `agility-page-${data.pageID}-${data.languageCode}`
-			revalidateTag(pageTag)
+			revalidateTag(pageTag, "max")
 
 
 			//also revalidate the sitemaps
 			const sitemapTagFlat = `agility-sitemap-flat-${data.languageCode}`
 			const sitemapTagNested = `agility-sitemap-nested-${data.languageCode}`
-			revalidateTag(sitemapTagFlat)
-			revalidateTag(sitemapTagNested)
+			revalidateTag(sitemapTagFlat, "max")
+			revalidateTag(sitemapTagNested, "max")
 
 			console.info("Revalidating page and sitemap tags:", pageTag, sitemapTagFlat, sitemapTagNested)
 
