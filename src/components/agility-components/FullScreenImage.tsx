@@ -7,19 +7,14 @@
  */
 
 import { getContentItem } from "@/lib/cms/getContentItem"
-import { type UnloadedModuleProps, AgilityPic } from "@agility/nextjs"
+import { type UnloadedModuleProps, AgilityPic, ImageField } from "@agility/nextjs"
 
 /**
  * Interface defining the structure of the FullScreenImage component fields.
  * The field names must match the field reference names in Agility CMS.
  */
 export interface FullScreenImageFields {
-	image?: {
-		url: string
-		label: string
-	}
-	altText?: string
-	objectFit?: "cover" | "contain" // How the image should fit
+	image?: ImageField
 }
 
 /**
@@ -34,7 +29,7 @@ export interface FullScreenImageFields {
  */
 const FullScreenImage = async ({ module, languageCode }: UnloadedModuleProps) => {
 	const {
-		fields: { image, altText, objectFit = "cover" },
+		fields: { image },
 		contentID,
 	} = await getContentItem<FullScreenImageFields>({
 		contentID: module.contentid,
@@ -42,10 +37,11 @@ const FullScreenImage = async ({ module, languageCode }: UnloadedModuleProps) =>
 	})
 
 	// Use placeholder if no image provided or URL is empty
+	const imageAlt = image?.label || "Full screen image"
 	const imageUrl = image?.url && image.url.trim() !== ""
 		? image.url
-		: `https://placehold.co/1920x1080/4F46E5/FFFFFF?text=${encodeURIComponent(altText || "Full+Screen+Image")}`
-	const imageAlt = altText || image?.label || "Full screen image"
+		: `https://placehold.co/1920x1080/4F46E5/FFFFFF?text=${encodeURIComponent(imageAlt)}`
+
 	const isPlaceholder = imageUrl.startsWith("https://placehold.co")
 
 	return (
@@ -59,16 +55,15 @@ const FullScreenImage = async ({ module, languageCode }: UnloadedModuleProps) =>
 					<img
 						src={imageUrl}
 						alt={imageAlt}
-						className={`w-full h-full object-${objectFit}`}
+						className={`w-full h-full object-contain`}
 						data-agility-field="image"
 					/>
 				) : image ? (
 					<AgilityPic
 						image={image}
 						alt={imageAlt}
-						width={1920}
-						height={1080}
-						className={`w-full h-full object-${objectFit}`}
+						fallbackWidth={1920}
+						className={`w-full h-full object-contain`}
 						data-agility-field="image"
 					/>
 				) : null}
