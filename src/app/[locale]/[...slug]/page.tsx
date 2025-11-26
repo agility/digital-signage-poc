@@ -89,7 +89,7 @@ export async function generateMetadata(
 export default async function Page({ params }: PageProps) {
 	const agilityData = await getAgilityPage({ params });
 	if (!agilityData.page) notFound();
-
+	console.log("Page agilityData", agilityData);
 	const AgilityPageTemplate = getPageTemplate(agilityData.pageTemplateName || "MainTemplate");
 
 	//get the search params from global data (since they are added in getAgilityPage)
