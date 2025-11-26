@@ -90,7 +90,7 @@ const PriceList = async ({ module, languageCode }: UnloadedModuleProps) => {
 									const priceInDollars = priceValue / 100
 
 									// Alternate background colors for visual interest
-									const bgColor = index % 2 === 0 ? "bg-white dark:bg-gray-50" : "bg-gray-50 dark:bg-gray-100"
+									const bgColor = index % 2 === 0 ? "bg-white dark:bg-slate-50" : "bg-slate-50 dark:bg-slate-100"
 
 									return (
 										<div
@@ -98,16 +98,16 @@ const PriceList = async ({ module, languageCode }: UnloadedModuleProps) => {
 											className={`${bgColor} p-6 md:p-8 lg:p-10 rounded-lg flex justify-between items-center gap-6 md:gap-8`}
 										>
 											<div className="flex-1">
-												<div className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 md:mb-3">
+												<h3 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-2 md:mb-3 text-slate-900">
 													{itemName}
-												</div>
+												</h3>
 												{description && (
-													<div className="text-xl md:text-2xl lg:text-3xl text-gray-700 dark:text-gray-600">
+													<div className="text-xl md:text-2xl lg:text-3xl text-slate-700 dark:text-slate-600">
 														{description}
 													</div>
 												)}
 											</div>
-											<div className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 dark:text-gray-100 whitespace-nowrap">
+											<div className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-slate-900 dark:text-slate-100 whitespace-nowrap">
 												${priceInDollars.toFixed(2)}
 											</div>
 										</div>
@@ -118,12 +118,12 @@ const PriceList = async ({ module, languageCode }: UnloadedModuleProps) => {
 					</div>
 				)}
 				{items.length === 0 && (
-					<p className="text-2xl md:text-3xl lg:text-4xl text-center text-gray-500 dark:text-gray-400">
+					<p className="text-2xl md:text-3xl lg:text-4xl text-center text-slate-500 dark:text-slate-400">
 						No items available
 					</p>
 				)}
 			</div>
-		</section>
+		</section >
 	)
 }
 
