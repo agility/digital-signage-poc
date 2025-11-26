@@ -41,6 +41,12 @@ export async function generateStaticParams() {
 			languageCode: locale,
 		});
 
+		// Handle case where sitemap might be null or undefined
+		if (!sitemap || typeof sitemap !== 'object') {
+			console.warn(`No sitemap found for locale: ${locale}`);
+			continue;
+		}
+
 		const localePaths = Object.values(sitemap)
 			.filter((node: any) => {
 				if (node.redirect !== null || node.isFolder === true) return false;
@@ -75,7 +81,7 @@ export async function generateMetadata(
 
 	// Basic metadata - can be enhanced with SEO fields from Agility
 	return {
-		title: agilityData.page?.seo?.metaTitle || 'Page',
+		title: agilityData.page?.title || 'Signboard',
 		description: agilityData.page?.seo?.metaDescription || '',
 	};
 }

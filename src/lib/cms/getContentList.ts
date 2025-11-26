@@ -7,9 +7,14 @@ import type { ContentListRequestParams } from "@agility/content-fetch/dist/metho
 export const getContentList = async <T>(params: ContentListRequestParams) => {
 	const agilitySDK = await getAgilitySDK()
 
+	// Ensure referenceName is a string for the cache tag
+	const referenceName = typeof params.referenceName === 'string'
+		? params.referenceName
+		: String(params.referenceName || 'unknown')
+
 	agilitySDK.config.fetchConfig = {
 		next: {
-			tags: [`agility-content-${params.referenceName.toLowerCase()}-${params.languageCode || params.locale}`],
+			tags: [`agility-content-${referenceName.toLowerCase()}-${params.languageCode || params.locale}`],
 			revalidate: 60,
 		},
 	}

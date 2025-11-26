@@ -12,6 +12,12 @@
  */
 
 import RichTextArea from "./RichTextArea"
+import Header from "./Header"
+import TextDisplay from "./TextDisplay"
+import ImageDisplay from "./ImageDisplay"
+import FullScreenImage from "./FullScreenImage"
+import PriceList from "./PriceList"
+import MenuBoard from "./MenuBoard"
 
 /**
  * Returns the React component for a given Agility CMS module name.
@@ -23,6 +29,18 @@ export const getModule = (moduleName: string) => {
 	switch (moduleName) {
 		case "RichTextArea":
 			return RichTextArea
+		case "Header":
+			return Header
+		case "TextDisplay":
+			return TextDisplay
+		case "ImageDisplay":
+			return ImageDisplay
+		case "FullScreenImage":
+			return FullScreenImage
+		case "PriceList":
+			return PriceList
+		case "MenuBoard":
+			return MenuBoard
 		default:
 			return null
 	}

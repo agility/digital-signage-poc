@@ -78,10 +78,12 @@ export async function middleware(request: NextRequest) {
 		 ************************/
 		const hasLocalePrefix = locales.some(locale => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`)
 		const isStaticFile = pathname.includes('.') || pathname.startsWith('/_next')
+		// Exclude special routes that don't need locale prefix
+		const isSpecialRoute = pathname === '/multi-board' || pathname.startsWith('/multi-board/')
 
 		const baseUrl = request.nextUrl.origin
 
-		if (!hasLocalePrefix && !isStaticFile) {
+		if (!hasLocalePrefix && !isStaticFile && !isSpecialRoute) {
 			const localeBasedUrl = new URL(`/${defaultLocale}${pathname}`, baseUrl)
 			return NextResponse.rewrite(localeBasedUrl)
 		}
@@ -95,7 +97,7 @@ export async function middleware(request: NextRequest) {
 
 export const config = {
 	matcher: [
-		'/((?!api|assets|_next/static|_next/image|favicon.ico).*)',
+		'/((?!api|assets|_next/static|_next/image|favicon.ico|multi-board).*)',
 	],
 }
 
