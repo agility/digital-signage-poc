@@ -35,6 +35,9 @@ export default function MultiBoardPage() {
 	// State to track which iframe set is visible (for double-buffering)
 	const [activeSet, setActiveSet] = useState<'a' | 'b'>('a')
 
+	// State to track selected menu
+	const [selectedMenu, setSelectedMenu] = useState('breakfast-menu')
+
 	// Refs for iframes to enable refresh (double-buffered)
 	const leftIframeRefA = useRef<HTMLIFrameElement>(null)
 	const middleIframeRefA = useRef<HTMLIFrameElement>(null)
@@ -103,7 +106,7 @@ export default function MultiBoardPage() {
 			}
 			if (middleRef.current) {
 				middleRef.current.addEventListener('load', middleHandler, { once: true })
-				const baseSrc = '/en-us/breakfast-menu'
+				const baseSrc = `/en-us/${selectedMenu}`
 				middleRef.current.src = `${baseSrc}?refresh=${Date.now()}`
 			}
 			if (rightRef.current) {
@@ -195,48 +198,76 @@ export default function MultiBoardPage() {
 					</div>
 
 					{/* Middle Panel - Menu Board */}
-					<div
-						className="border-2 border-gray-700 shadow-2xl overflow-hidden relative"
-						style={{
-							width: `${vertical1080pWidth}px`,
-							height: `${vertical1080pHeight}px`,
-							transform: 'rotateY(0deg) translateZ(50px)',
-							transformStyle: 'preserve-3d',
-							backfaceVisibility: 'hidden'
-						}}
-					>
-						{/* Iframe Set A */}
-						<iframe
-							ref={middleIframeRefA}
-							src="/en-us/breakfast-menu"
-							className="border-0 absolute inset-0 transition-opacity duration-500"
-							title="Breakfast Menu Board"
-							scrolling="no"
+					<div className="flex flex-col items-center" style={{ transform: 'rotateY(0deg) translateZ(50px)', transformStyle: 'preserve-3d' }}>
+						{/* Menu Selector - Above Middle Panel */}
+						<div className="mb-6 z-50">
+							<select
+								value={selectedMenu}
+								onChange={(e) => {
+									const newMenu = e.target.value
+									setSelectedMenu(newMenu)
+									// Update both iframe sets immediately
+									if (middleIframeRefA.current) {
+										middleIframeRefA.current.src = `/en-us/${newMenu}?refresh=${Date.now()}`
+									}
+									if (middleIframeRefB.current) {
+										middleIframeRefB.current.src = `/en-us/${newMenu}?refresh=${Date.now()}`
+									}
+								}}
+								className="bg-white border-3 border-gray-400 rounded-lg shadow-xl font-bold text-gray-900 cursor-pointer hover:border-gray-500 focus:outline-none focus:ring-4 focus:ring-red-500 focus:border-red-600 transition-all"
+								style={{
+									fontSize: `${48 * scale}px`,
+									padding: `${16 * scale}px ${32 * scale}px`,
+									minWidth: `${300 * scale}px`
+								}}
+							>
+								<option value="breakfast-menu">Breakfast Menu</option>
+								<option value="lunch-menu">Lunch Menu</option>
+								<option value="dinner-menu">Dinner Menu</option>
+							</select>
+						</div>
+						<div
+							className="border-2 border-gray-700 shadow-2xl overflow-hidden relative"
 							style={{
 								width: `${vertical1080pWidth}px`,
 								height: `${vertical1080pHeight}px`,
-								display: 'block',
-								border: 'none',
-								opacity: activeSet === 'a' ? 1 : 0,
-								pointerEvents: activeSet === 'a' ? 'auto' : 'none'
+								transformStyle: 'preserve-3d',
+								backfaceVisibility: 'hidden'
 							}}
-						/>
-						{/* Iframe Set B */}
-						<iframe
-							ref={middleIframeRefB}
-							src="/en-us/breakfast-menu"
-							className="border-0 absolute inset-0 transition-opacity duration-500"
-							title="Breakfast Menu Board"
-							scrolling="no"
-							style={{
-								width: `${vertical1080pWidth}px`,
-								height: `${vertical1080pHeight}px`,
-								display: 'block',
-								border: 'none',
-								opacity: activeSet === 'b' ? 1 : 0,
-								pointerEvents: activeSet === 'b' ? 'auto' : 'none'
-							}}
-						/>
+						>
+							{/* Iframe Set A */}
+							<iframe
+								ref={middleIframeRefA}
+								src={`/en-us/${selectedMenu}`}
+								className="border-0 absolute inset-0 transition-opacity duration-500"
+								title="Menu Board"
+								scrolling="no"
+								style={{
+									width: `${vertical1080pWidth}px`,
+									height: `${vertical1080pHeight}px`,
+									display: 'block',
+									border: 'none',
+									opacity: activeSet === 'a' ? 1 : 0,
+									pointerEvents: activeSet === 'a' ? 'auto' : 'none'
+								}}
+							/>
+							{/* Iframe Set B */}
+							<iframe
+								ref={middleIframeRefB}
+								src={`/en-us/${selectedMenu}`}
+								className="border-0 absolute inset-0 transition-opacity duration-500"
+								title="Menu Board"
+								scrolling="no"
+								style={{
+									width: `${vertical1080pWidth}px`,
+									height: `${vertical1080pHeight}px`,
+									display: 'block',
+									border: 'none',
+									opacity: activeSet === 'b' ? 1 : 0,
+									pointerEvents: activeSet === 'b' ? 'auto' : 'none'
+								}}
+							/>
+						</div>
 					</div>
 
 					{/* Right Panel - Price List */}

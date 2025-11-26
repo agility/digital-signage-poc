@@ -2,6 +2,7 @@ import { getPageTemplate } from "@/components/agility-pages"
 import { type PageProps, getAgilityPage } from "@/lib/cms/getAgilityPage"
 import { getAgilityContext } from "@/lib/cms/getAgilityContext"
 import agilitySDK from "@agility/content-fetch"
+import MenuSelector from "@/components/MenuSelector"
 
 import type { Metadata, ResolvingMetadata } from "next"
 
@@ -89,14 +90,23 @@ export async function generateMetadata(
 export default async function Page({ params }: PageProps) {
 	const agilityData = await getAgilityPage({ params });
 	if (!agilityData.page) notFound();
-	console.log("Page agilityData", agilityData);
+
 	const AgilityPageTemplate = getPageTemplate(agilityData.pageTemplateName || "MainTemplate");
 
 	//get the search params from global data (since they are added in getAgilityPage)
 	const globalSearchParams = agilityData.globalData?.["searchParams"] || {};
 
+	// Check if this is a menu page
+	const awaitedParams = await params;
+	const slug = awaitedParams.slug || [];
+	const slugPath = slug.join('/');
+	const isMenuPage = slugPath.includes('breakfast-menu') ||
+		slugPath.includes('lunch-menu') ||
+		slugPath.includes('dinner-menu');
+
 	return (
 		<div data-agility-page={agilityData.page?.pageID} data-agility-dynamic-content={agilityData.sitemapNode.contentID}>
+			{isMenuPage && <MenuSelector />}
 			{AgilityPageTemplate ? (
 				<AgilityPageTemplate {...agilityData} searchParams={globalSearchParams} />
 			) : (

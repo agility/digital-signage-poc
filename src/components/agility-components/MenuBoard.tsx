@@ -84,7 +84,7 @@ const MenuBoard = async ({ module, languageCode }: UnloadedModuleProps) => {
 
 		if (menuItemsRef) {
 			try {
-				console.log(`Fetching menu items from container: "${menuItemsRef}"`)
+
 				const itemsList = await getContentList<MenuItem>({
 					referenceName: menuItemsRef,
 					languageCode,
