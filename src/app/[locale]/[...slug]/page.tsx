@@ -1,8 +1,6 @@
 import { getPageTemplate } from "@/components/agility-pages"
 import { type PageProps, getAgilityPage } from "@/lib/cms/getAgilityPage"
-import { getAgilityContext } from "@/lib/cms/getAgilityContext"
 import agilitySDK from "@agility/content-fetch"
-import MenuSelector from "@/components/MenuSelector"
 
 import type { Metadata, ResolvingMetadata } from "next"
 
@@ -106,7 +104,7 @@ export default async function Page({ params }: PageProps) {
 
 	return (
 		<div data-agility-page={agilityData.page?.pageID} data-agility-dynamic-content={agilityData.sitemapNode.contentID}>
-			{isMenuPage && <MenuSelector />}
+
 			{AgilityPageTemplate ? (
 				<AgilityPageTemplate {...agilityData} searchParams={globalSearchParams} />
 			) : (
